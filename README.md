@@ -139,20 +139,36 @@ If you'd like to demonstrate live cloud sync with Supabase:
 
 ```
 project/
-├── index.html            # Main responsive Single Page Application
+├── index.html               # Main responsive Single Page Application
+├── presentation.html        # Interactive 16:9 Pitch Deck (Fullscreen & PDF export)
+├── FoodSave_Pitch_Deck.pptx # Native PowerPoint Pitch Deck (10 slides)
+├── generate_pitch_deck.py   # Automated PPTX slide generator
 ├── css/
-│   └── styles.css        # Clean sustainability CSS design system
+│   └── styles.css           # Clean sustainability CSS design system
 ├── js/
-│   ├── app.js            # UI controller, event listeners, modals & renderers
-│   ├── db.js             # Unified data abstraction (Supabase / SQLite / localStorage)
-│   ├── mockData.js       # Realistic sample donations & hackathon presets
-│   └── supabaseClient.js # Native PostgREST client for Supabase
-├── server.py             # Python 3 SQLite backend + REST API + static server
-├── foodsave.db           # SQLite database file
+│   ├── app.js               # UI controller, event listeners, modals & renderers
+│   ├── db.js                # Unified data abstraction (Supabase / SQLite / localStorage)
+│   ├── mockData.js          # Realistic sample donations & hackathon presets
+│   └── supabaseClient.js    # Native PostgREST client for Supabase
+├── server.py                # Python 3 SQLite backend + REST API + static server
+├── foodsave.db              # SQLite database file
 ├── supabase/
-│   └── schema.sql        # Supabase SQL migration script & RLS policies
-└── README.md             # Documentation & presentation guide
+│   └── schema.sql           # Supabase SQL migration script & RLS policies
+└── README.md                # Documentation & presentation guide
 ```
+
+---
+
+## 📊 Presentation & Pitch Deck
+
+FoodSave includes both a native PowerPoint file and a web-based interactive presentation deck:
+
+1. **PowerPoint Presentation (`FoodSave_Pitch_Deck.pptx`)**:
+   - Ready to upload to Google Drive, Google Slides, Canva, or Microsoft PowerPoint.
+   - 10 professionally formatted 16:9 widescreen slides covering the problem statement, closing-time auto-dispatch, smart priority engine, EPA carbon calculations, and technical architecture.
+2. **Interactive Web Deck (`presentation.html`)**:
+   - View in browser: [`presentation.html`](presentation.html)
+   - Features keyboard navigation (`←` `→` `Space`), fullscreen mode (`F`), and instant **"Print / Save PDF"** capability.
 
 ---
 

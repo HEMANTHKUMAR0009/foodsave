@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodSave Pitch Deck - Hackathon Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-dark: #064e3b;
+      --primary-light: #10b981;
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Top Bar Controls */
+    .top-controls {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #34d399;
+    }
+
+    .control-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-ctrl {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .btn-ctrl:hover {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #34d399;
+    }
+
+    .btn-ctrl.primary {
+      background: #059669;
+      border-color: #10b981;
+      color: #fff;
+    }
+
+    .btn-ctrl.primary:hover {
+      background: #10b981;
+    }
+
+    /* Deck Viewport */
+    .deck-container {
+      width: 100%;
+      max-width: 1200px;
+      height: 680px;
+      margin: 80px auto 70px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1160px;
+      height: 650px;
+      background: radial-gradient(120% 120% at 50% 10%, #1e293b 0%, #0f172a 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 48px 56px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Slide Elements */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      max-width: 800px;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Grids & Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(52, 211, 153, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+
+    .badge-high { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .badge-medium { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-low { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #34d399;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* Cover Slide Specific */
+    .cover-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .cover-title {
+      font-size: 3.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #a7f3d0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cover-subtitle {
+      font-size: 1.4rem;
+      color: #cbd5e1;
+      max-width: 750px;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .meta-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .meta-pill strong {
+      color: #34d399;
+    }
+
+    /* Navigation Bar at Bottom */
+    .deck-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .nav-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: #10b981;
+      transition: width 0.3s ease;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: #059669;
+      border-color: #10b981;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    .slide-counter span {
+      color: #34d399;
+    }
+
+    /* Code block styling */
+    .code-box {
+      background: #0b1120;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      line-height: 1.6;
+    }
+
+    /* Print / PDF Mode */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #0f172a !important;
+      }
+      .top-controls, .deck-nav {
+        display: none !important;
+      }
+      .deck-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        max-width: 100% !important;
+        display: block !important;
+      }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        width: 100% !important;
+        height: 100vh !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+        border: none !important;
+        background: #f8fafc !important;
+        box-shadow: none !important;
+        padding: 40px !important;
+        color: #0f172a !important;
+      }
+      .slide-title {
+        background: none !important;
+        -webkit-text-fill-color: #0f172a !important;
+        color: #0f172a !important;
+      }
+      .card {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
+      }
+      .card-title {
+        color: #0f172a !important;
+      }
+      .card-desc, .slide-subtitle, .stat-label {
+        color: #475569 !important;
+      }
+      .code-box {
+        background: #f1f5f9 !important;
+        color: #0369a1 !important;
+        border-color: #cbd5e1 !important;
+      }
+      .cover-title {
+        -webkit-text-fill-color: #059669 !important;
+      }
+      .meta-pill {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+        border-color: #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="top-controls">
+    <div class="brand-title">
+      <span>🌱</span> FoodSave Pitch Deck
+    </div>
+    <div class="control-actions">
+      <span style="font-size: 0.8rem; color: #94a3b8; margin-right: 8px;">Keys: ← → / Space / F</span>
+      <button class="btn-ctrl" onclick="toggleFullScreen()">⛶ Fullscreen</button>
+      <button class="btn-ctrl" onclick="window.print()">🖨️ Print / Save PDF</button>
+      <a href="index.html" class="btn-ctrl primary">🚀 Open Live App</a>
+    </div>
+  </header>
+
+  <!-- Presentation Deck Container -->
+  <main class="deck-container">
+
+    <!-- Slide 1: Cover -->
+    <section class="slide active" id="slide-1">
+      <div class="cover-content">
+        <div class="slide-tag">Hackathon Pitch Deck</div>
+        <h1 class="cover-title">FoodSave 🌱</h1>
+        <p class="cover-subtitle">
+          AI-Assisted Surplus Food Rescue & NGO Auto-Dispatch Platform
+        </p>
+        <div class="meta-pills">
+          <div class="meta-pill">Event: <strong>Prompt to Production</strong></div>
+          <div class="meta-pill">Track: <strong>NBKRIST × ISTE × Paytm</strong></div>
+          <div class="meta-pill">Presenter: <strong>Hemanth Kumar Puthuru</strong></div>
+          <div class="meta-pill">Theme: <strong>Sustainability & Food Waste</strong></div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Prompt to Production Hackathon 2026</span>
+        <span>Slide 1 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 2: Problem Statement -->
+    <section class="slide" id="slide-2">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">The Challenge</div>
+          <h2 class="slide-title">The Real-World Crisis</h2>
+          <p class="slide-subtitle">Millions of tons of edible food end up in landfills while local communities face hunger.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🗑️</div>
+            <div class="card-title">Closing-Time Waste</div>
+            <div class="card-desc">College canteens, hostel messes, restaurants, and caterers prepare food in bulk. Every night at closing, large edible batches are thrown away.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">⏳</div>
+            <div class="card-title">The Coordination Bottleneck</div>
+            <div class="card-desc">Providers lack a rapid, automated way to log remaining food. Shelters and NGOs have zero real-time visibility to dispatch volunteers before food spoils.</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌍</div>
+            <div class="card-title">Massive Carbon Cost</div>
+            <div class="card-desc">Landfilled food rots into methane—a potent greenhouse gas. Every 1 kg of wasted food produces ~2.5 kg of CO₂ equivalent emissions.</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — Eliminating Food Waste at Scale</span>
+        <span>Slide 2 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 3: The Solution -->
+    <section class="slide" id="slide-3">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">Our Solution</div>
+          <h2 class="slide-title">Introducing FoodSave</h2>
+          <p class="slide-subtitle">An end-to-end intelligent platform connecting surplus food providers with receivers in under 60 seconds.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title" style="color: #34d399; font-size: 1.3rem;">⚡ Core Value Propositions</div>
+            <ul style="list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem; color: #cbd5e1;">
+              <li>✅ <strong>Zero-Friction Posting:</strong> 1-click presets & closing-time auto audit.</li>
+              <li>✅ <strong>60-Second NGO Auto-Dispatch:</strong> Proactive alerts pushed automatically.</li>
+              <li>✅ <strong>Smart Rescue Urgency:</strong> Dynamic priority scoring (HIGH/MED/LOW).</li>
+              <li>✅ <strong>Verified Pickup Chain:</strong> 6-digit claim codes & digital pickup passes.</li>
+              <li>✅ <strong>Dynamic Impact Auditing:</strong> Live tracking of meals and CO₂ diverted.</li>
+            </ul>
+          </div>
+          <div class="card" style="justify-content: center; align-items: center; text-align: center; background: rgba(5, 150, 105, 0.08); border-color: rgba(16, 185, 129, 0.3);">
+            <div style="font-size: 3.5rem; margin-bottom: 12px;">🔄</div>
+            <h3 style="font-size: 1.3rem; margin-bottom: 8px;">The Closed-Loop Rescue Cycle</h3>
+            <p style="font-size: 0.9rem; color: #94a3b8; max-width: 380px;">
+              Food Provider (Canteen/Restaurant) ➔ Automated Inventory Audit ➔ Priority NGO Broadcast ➔ Instant Claim ➔ Verified Pickup Pass ➔ Landfill Diverted
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — Platform Overview</span>
+        <span>Slide 3 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 4: Restaurant Closing & Auto Dispatch -->
+    <section class="slide" id="slide-4">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">Game Changer Feature</div>
+          <h2 class="slide-title">Closing-Time Auto-Dispatch</h2>
+          <p class="slide-subtitle">Solving the exact scenario: Restaurants & canteens closing at night automatically alert NGOs in 1 minute.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="badge-pill badge-low">Step 1</span>
+            <div class="card-title">Operating Hours & Menu</div>
+            <div class="card-desc">Configure business hours (e.g. 10:00 AM – 10:00 PM). The live inventory tracker tallies prepared batches vs portions sold for each dish.</div>
+          </div>
+          <div class="card">
+            <span class="badge-pill badge-medium">Step 2</span>
+            <div class="card-title">Automated Surplus Audit</div>
+            <div class="card-desc">At closing time, the system automatically audits remaining food, aggregates total meals & weight, and checks safe storage compliance.</div>
+          </div>
+          <div class="card">
+            <span class="badge-pill badge-high">Step 3</span>
+            <div class="card-title">60-Second NGO Countdown</div>
+            <div class="card-desc">Triggers an automated 1-minute countdown timer. At 00:00, automated broadcast dispatch alerts are pushed to registered partner charities and shelters.</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — Automated NGO Dispatch</span>
+        <span>Slide 4 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 5: Smart Rescue Priority Engine -->
+    <section class="slide" id="slide-5">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">Algorithmic Intelligence</div>
+          <h2 class="slide-title">Smart Rescue Priority Engine</h2>
+          <p class="slide-subtitle">Dynamic urgency scoring guarantees that food closest to expiry gets rescued first.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card" style="border-left: 4px solid #ef4444;">
+            <span class="badge-pill badge-high">🔥 HIGH PRIORITY</span>
+            <div class="card-title">Urgent Perishables</div>
+            <div class="card-desc"><strong>Condition:</strong> Expires in ≤ 2 hours OR quantity > 40 meals.<br><br>Prominently badged in red and automatically pinned to the top of the search feed for immediate rescue pickup.</div>
+          </div>
+          <div class="card" style="border-left: 4px solid #f59e0b;">
+            <span class="badge-pill badge-medium">⚡ MEDIUM PRIORITY</span>
+            <div class="card-title">Moderate Window</div>
+            <div class="card-desc"><strong>Condition:</strong> Expires in ≤ 5 hours OR quantity between 20–40 meals.<br><br>Badged in golden amber; targeted for scheduled pickup rounds by local volunteer drivers.</div>
+          </div>
+          <div class="card" style="border-left: 4px solid #10b981;">
+            <span class="badge-pill badge-low">🟢 LOW PRIORITY</span>
+            <div class="card-title">Standard Window</div>
+            <div class="card-desc"><strong>Condition:</strong> Ample expiry window (> 5 hours) & standard meal size.<br><br>Badged in emerald green; ideal for pantry consolidation or next-morning distributions.</div>
+          </div>
+        </div>
+        <div class="code-box" style="margin-top: 16px;">
+          ⏱️ <strong>Live Dynamic Ticker:</strong> Every 30 seconds, background interval audits timestamps. If a Medium item enters the 2-hour window, it automatically upgrades to HIGH PRIORITY in real time.
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — Smart Priority Engine</span>
+        <span>Slide 5 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 6: Receiver Experience & Pickup Pass -->
+    <section class="slide" id="slide-6">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">Seamless UX</div>
+          <h2 class="slide-title">Claiming & Digital Pickup Pass</h2>
+          <p class="slide-subtitle">A friction-free workflow designed for quick operations in high-stress volunteer environments.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🎫 Digital Pickup Pass Features</div>
+            <ul style="list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; color: #cbd5e1;">
+              <li>🔒 <strong>Cryptographic 6-Digit Claim Code:</strong> Unique token (e.g. <code>FS-7491</code>) prevents unauthorized claims.</li>
+              <li>📞 <strong>1-Click Call Provider:</strong> Direct phone call link to the kitchen manager.</li>
+              <li>📋 <strong>One-Tap Share Instructions:</strong> Copies pickup address, gate instructions, and contact details for dispatch drivers.</li>
+              <li>✅ <strong>Proof of Pickup:</strong> Receiver taps "Confirm Food Picked Up" to close the claim loop.</li>
+            </ul>
+          </div>
+          <div class="card" style="background: rgba(15, 23, 42, 0.8); border: 1px dashed rgba(52, 211, 153, 0.4); padding: 20px;">
+            <div style="font-size: 0.8rem; text-transform: uppercase; color: #34d399; font-weight: 700; letter-spacing: 0.05em;">Digital Pass Preview</div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 8px 0;">Claim Code: <span style="font-family: monospace; color: #f59e0b;">FS-8291</span></div>
+            <div style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">
+              <strong>Item:</strong> Campus Lunch Buffet (45 meals)<br>
+              <strong>Provider:</strong> Central Campus Canteen<br>
+              <strong>Pickup Gate:</strong> Back Loading Dock, Door 3
+            </div>
+            <div style="margin-top: 14px; padding: 8px 12px; background: rgba(16, 185, 129, 0.15); border-radius: 6px; font-size: 0.8rem; color: #34d399; text-align: center; font-weight: 600;">
+              🟢 Verified Claim Active · Driver En Route
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — Claim & Pickup Workflow</span>
+        <span>Slide 6 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 7: Dynamic Impact Dashboard -->
+    <section class="slide" id="slide-7">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">Verifiable Analytics</div>
+          <h2 class="slide-title">Dynamic Impact Dashboard</h2>
+          <p class="slide-subtitle">100% dynamically calculated metrics using official EPA WARM emissions algorithms.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="card" style="text-align: center;">
+            <div class="stat-number">285+</div>
+            <div class="stat-label">Meals Rescued</div>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-number">65</div>
+            <div class="stat-label">Meals Available Now</div>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-number">114 kg</div>
+            <div class="stat-label">Waste Diverted</div>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-number">285 kg</div>
+            <div class="stat-label">CO₂ Offset</div>
+          </div>
+        </div>
+        <div class="grid-3" style="margin-top: 20px;">
+          <div class="card">
+            <div class="card-title">🚗 Vehicle Miles Offset</div>
+            <div class="card-desc">Translates kg of CO₂ avoided into equivalent gasoline passenger vehicle miles saved.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">🚿 Clean Water Conserved</div>
+            <div class="card-desc">Quantifies embedded agricultural water saved by preventing wasted food production.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">👨‍👩‍👧‍👦 Family Days Nourished</div>
+            <div class="card-desc">Converts rescued meal portions into full daily nutrition units for families in need.</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — Impact & Carbon Analytics</span>
+        <span>Slide 7 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 8: Technical Architecture -->
+    <section class="slide" id="slide-8">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">Under The Hood</div>
+          <h2 class="slide-title">Technical Architecture</h2>
+          <p class="slide-subtitle">Resilient, multi-tier architecture supporting both local offline demonstrations and cloud scale.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">💻</div>
+            <div class="card-title">Frontend Stack</div>
+            <div class="card-desc">
+              • Clean Semantic HTML5 & Modern CSS3<br>
+              • Vanilla JavaScript (ES6+ Modules)<br>
+              • Zero heavy bundle dependencies<br>
+              • 100% Mobile & Desktop Responsive
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-icon">⚙️</div>
+            <div class="card-title">Backend REST Engine</div>
+            <div class="card-desc">
+              • Lightweight Python 3 HTTP Server<br>
+              • SQLite persistent storage (<code>foodsave.db</code>)<br>
+              • Fast REST endpoints for donations, claims, stats & auto-dispatch
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-icon">☁️</div>
+            <div class="card-title">Cloud Ready (Supabase)</div>
+            <div class="card-desc">
+              • PostgreSQL relational schema<br>
+              • Row Level Security (RLS) policies<br>
+              • Seamless 1-click cloud sync toggle<br>
+              • LocalStorage fail-safe fallback
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — System Architecture</span>
+        <span>Slide 8 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 9: Prompt Engineering & AI -->
+    <section class="slide" id="slide-9">
+      <div class="slide-header">
+        <div>
+          <div class="slide-tag">Prompt to Production Track</div>
+          <h2 class="slide-title">AI & Prompt Architecture</h2>
+          <p class="slide-subtitle">How structured prompt design powers rapid surplus valuation, classification, and partner alerts.</p>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">🤖 Prompt Engineering Pipelines</div>
+            <ul style="list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: #cbd5e1;">
+              <li>1. <strong>Surplus Extraction:</strong> Ingests raw kitchen inventory logs and extracts item names, meal counts, and estimated kg weight using strict JSON schemas.</li>
+              <li>2. <strong>Food-Safety Temperature Advisor:</strong> Automatically attaches safety guidelines (e.g. "Maintain hot hold &gt;65°C" or "Refrigerate at &lt;4°C").</li>
+              <li>3. <strong>Contextual NGO Alert Generator:</strong> Crafts personalized dispatch alerts with pickup time windows, allergen flags, and vehicle size recommendations.</li>
+            </ul>
+          </div>
+          <div class="card code-box">
+            <span style="color: #94a3b8;">// Prompt Architecture Sample</span><br>
+            <span style="color: #f472b6;">"role"</span>: <span style="color: #a7f3d0;">"system"</span>,<br>
+            <span style="color: #f472b6;">"content"</span>: <span style="color: #fde047;">"You are FoodSave AI Dispatcher. Given inventory delta at closing time, calculate edible meals, assign Rescue Priority, and generate structured rescue payloads for nearby shelters."</span><br><br>
+            <span style="color: #38bdf8;">Output:</span> { priority: <span style="color: #ef4444;">"HIGH"</span>, meals: <span style="color: #fde047;">45</span>, dispatch_in: <span style="color: #fde047;">60</span>, recipient: <span style="color: #a7f3d0;">"Hope Community Shelter"</span> }
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — AI & Prompt Strategy</span>
+        <span>Slide 9 of 10</span>
+      </div>
+    </section>
+
+    <!-- Slide 10: Conclusion & Call to Action -->
+    <section class="slide" id="slide-10">
+      <div class="cover-content">
+        <div class="slide-tag">Impact & Vision</div>
+        <h2 class="slide-title" style="font-size: 2.8rem; margin-bottom: 16px;">Saving Food. Nourishing Lives. Protecting the Planet.</h2>
+        <p class="cover-subtitle" style="font-size: 1.15rem; max-width: 700px; margin-bottom: 28px;">
+          FoodSave transforms closing-time food waste from an unavoidable expense into a community lifeline. Built for scale across colleges, restaurants, and cities.
+        </p>
+        <div class="grid-3" style="max-width: 800px; width: 100%; margin-bottom: 24px;">
+          <div class="card" style="padding: 16px; text-align: center;">
+            <div style="font-weight: 700; color: #34d399;">Ready for Production</div>
+            <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Zero-setup deployment</div>
+          </div>
+          <div class="card" style="padding: 16px; text-align: center;">
+            <div style="font-weight: 700; color: #38bdf8;">Scalable Impact</div>
+            <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Campuses to metro cities</div>
+          </div>
+          <div class="card" style="padding: 16px; text-align: center;">
+            <div style="font-weight: 700; color: #f59e0b;">Open Source</div>
+            <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">github.com/HEMANTHKUMAR0009/FoodSave</div>
+          </div>
+        </div>
+        <div style="font-size: 1.1rem; font-weight: 700; color: #e2e8f0;">
+          Thank You! Any Questions? 🚀
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>FoodSave — Final Pitch</span>
+        <span>Slide 10 of 10</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <footer class="deck-nav">
+    <div class="nav-progress" id="progressBar" style="width: 10%;"></div>
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" disabled>← Previous</button>
+    <div class="slide-counter">
+      Slide <span id="currentSlideNum">1</span> of <span id="totalSlideNum">10</span>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+  </footer>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 10;
+
+    function updateSlide() {
+      // Update slides visibility
+      for (let i = 1; i <= totalSlides; i++) {
+        const slide = document.getElementById(`slide-${i}`);
+        if (slide) {
+          slide.classList.toggle('active', i === currentSlide);
+        }
+      }
+
+      // Update counters & buttons
+      document.getElementById('currentSlideNum').innerText = currentSlide;
+      document.getElementById('totalSlideNum').innerText = totalSlides;
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+
+      // Update progress bar
+      const progressPct = (currentSlide / totalSlides) * 100;
+      document.getElementById('progressBar').style.width = `${progressPct}%`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        goToSlide(1);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        goToSlide(totalSlides);
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      }
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) nextSlide();
+      if (touchEndX - touchStartX > 50) prevSlide();
+    });
+
+    // Initialize
+    updateSlide();
+  </script>
+</body>
+</html>
