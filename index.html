@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodSave - Rescue Surplus Food & Prevent Waste</title>
+  <meta name="description" content="FoodSave connects college canteens, restaurants, hostel messes, events, and households with surplus food to people and organizations in need.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+</head>
+<body>
+
+  <!-- Top Hackathon & Demo Presentation Bar -->
+  <aside class="demo-bar" aria-label="Demo Bar">
+    <div class="demo-bar-left">
+      <span class="demo-chip" id="dbStatusBadge">
+        <span class="status-indicator"></span>
+        <span>Local Database Active</span>
+      </span>
+      <span style="color: #64748b;">|</span>
+      <span>Demo Role Switcher:</span>
+      <div class="role-switcher-group" role="group" aria-label="Role Switcher">
+        <button type="button" class="role-btn active" data-role="all">All Community</button>
+        <button type="button" class="role-btn" data-role="provider">🏫 Canteen/Provider</button>
+        <button type="button" class="role-btn" data-role="receiver">🤝 Shelter/Receiver</button>
+      </div>
+      <button type="button" class="demo-action-btn" onclick="scrollToRestaurantHub()" style="background: rgba(16, 185, 129, 0.25); color: #6ee7b7; border-color: rgba(52, 211, 153, 0.4);">
+        ⏱️ Restaurant 1-Min Auto-Dispatch
+      </button>
+    </div>
+    <div class="demo-bar-right">
+      <button type="button" class="demo-action-btn" onclick="openSupabaseModal()" title="Configure Supabase Cloud Database">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+        Supabase Config
+      </button>
+      <button type="button" class="demo-action-btn" onclick="resetDemoData()" title="Reset to sample hackathon data">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+        Reset Demo
+      </button>
+    </div>
+  </aside>
+
+  <!-- Sticky Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-logo" aria-label="FoodSave Home">
+        <div class="brand-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">FoodSave <span class="brand-tag">MVP</span></div>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#restaurantHubSection" class="nav-link">🍽️ Restaurant Auto-Dispatch</a></li>
+          <li><a href="#availableFoodSection" class="nav-link active">Available Food</a></li>
+          <li><a href="#impactSection" class="nav-link">Impact Dashboard</a></li>
+          <li><a href="#howItWorksSection" class="nav-link">How It Works</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="btn-primary" onclick="openModal('postFoodModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Donate Surplus Food
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section & Live Key Metrics (Feature 1) -->
+  <section class="hero-section" id="heroSection">
+    <div class="hero-container">
+      <div class="hero-badge" id="heroAvailableBadge">
+        🟢 5 surplus donations ready for pickup now
+      </div>
+      <h1 class="hero-title">
+        Rescue Surplus Food. Feed People, <span class="text-highlight">Not Landfills.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Empowering university canteens, restaurants, hostel messes, events, and households to post edible surplus food in seconds — enabling local pantries, shelters, and students to discover and claim it before expiry.
+      </p>
+
+      <div class="hero-cta-group">
+        <button type="button" class="btn-primary" onclick="openModal('postFoodModal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Donate Surplus Food
+        </button>
+        <a href="#availableFoodSection" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Explore Surplus Food
+        </a>
+      </div>
+
+      <!-- Live Home Dashboard KPI Strip -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpiTotalMeals">0</div>
+            <div class="kpi-label">Total Meals Rescued</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-amber">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpiAvailMeals">0</div>
+            <div class="kpi-label">Meals Available Now</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-emerald">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpiWasteSaved">0 kg</div>
+            <div class="kpi-label">Food Waste Prevented</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpiCo2Avoided">0 kg</div>
+            <div class="kpi-label">CO₂ Emissions Offset</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="main-content">
+
+    <!-- RESTAURANT OPERATING HOURS & 1-MIN AUTO-DISPATCH HUB -->
+    <section class="restaurant-hub-section" id="restaurantHubSection">
+      <div class="restaurant-header-card">
+        <div class="restaurant-title-box">
+          <h3>
+            <span>🍽️</span>
+            <span id="restHubName">Bistro Verde &amp; Campus Dining</span>
+          </h3>
+          <p>
+            Operating Hours: Daily Opening at <strong id="lblOpenTime">10:00 AM</strong>, Closing at <strong id="lblCloseTime">10:00 PM</strong>.
+            At closing time, the system audits remaining surplus food and <strong>automatically sends pickup requests to partner NGOs within 1 minute</strong>.
+          </p>
+        </div>
+
+        <div class="operating-controls-bar">
+          <div class="store-status-pill status-open" id="storeStatusPill">
+            <span class="status-dot"></span>
+            <span id="storeStatusText">OPEN (10:00 AM - 10:00 PM)</span>
+          </div>
+
+          <div class="time-input-group">
+            <label for="restOpenTime" style="font-size: 0.75rem; color: #a7f3d0;">Opens:</label>
+            <input type="time" id="restOpenTime" class="time-input-field" value="10:00" onchange="onOperatingHoursChanged()">
+          </div>
+
+          <div class="time-input-group">
+            <label for="restCloseTime" style="font-size: 0.75rem; color: #fca5a5;">Closes:</label>
+            <input type="time" id="restCloseTime" class="time-input-field" value="22:00" onchange="onOperatingHoursChanged()">
+          </div>
+
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn-primary" id="btnSimulateClose" onclick="triggerStoreClosing()" style="padding: 0.5rem 0.875rem; font-size: 0.8125rem; background: #dc2626;">
+              ⚡ Close Store &amp; Auto-Dispatch
+            </button>
+            <button type="button" class="btn-secondary" id="btnReopenStore" onclick="reopenRestaurant()" style="padding: 0.5rem 0.875rem; font-size: 0.8125rem; display: none;">
+              🔄 Reopen Store
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu Inventory & Remaining Food Table -->
+      <div class="menu-inventory-card">
+        <div class="menu-inventory-header">
+          <h4>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Daily Restaurant Menu &amp; Remaining Inventory
+          </h4>
+          <span style="font-size: 0.8125rem; color: var(--neutral-500);">Live track prepared portions vs customer orders</span>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="menu-items-table">
+            <thead>
+              <tr>
+                <th>Menu Dish / Item</th>
+                <th>Category</th>
+                <th>Batch Prepared</th>
+                <th>Sold / Consumed</th>
+                <th>Remaining Surplus (For NGOs)</th>
+                <th>Adjust Sold</th>
+              </tr>
+            </thead>
+            <tbody id="menuInventoryTableBody">
+              <!-- Rendered dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="menu-summary-bar">
+          <div>
+            <span>Total Prepared: <strong id="menuTotalPrepared">0</strong> | </span>
+            <span>Total Sold: <strong id="menuTotalSold">0</strong></span>
+          </div>
+          <div>
+            <span>🎯 <strong>Audited Surplus Available for NGOs:</strong></span>
+            <span class="qty-surplus-pill" style="font-size: 0.9375rem;" id="menuTotalSurplusPill">0 Meals (~0.0 kg)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1-Minute Auto-Dispatch Countdown Card (Appears at Closing Time) -->
+      <div class="dispatch-banner-card dispatch-banner-waiting" id="dispatchCountdownCard" style="display: none;">
+        <div class="dispatch-timer-header">
+          <div>
+            <h4 style="font-size: 1.125rem; font-weight: 800; color: #92400e; display: flex; align-items: center; gap: 8px;">
+              <span>⏱️</span> Store Closed - Remaining Food Analyzed! Auto-Dispatching to NGOs
+            </h4>
+            <p style="font-size: 0.875rem; color: #b45309; margin-top: 2px;">
+              Surplus analyzed: <strong id="dispatchSurplusSummary">0 Meals</strong>. Sending emergency rescue requests to registered NGOs in 1 minute.
+            </p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="countdown-digits" id="dispatchCountdownDigits">01:00</div>
+            <button type="button" class="btn-primary" onclick="fastForwardDispatch()" style="padding: 0.5rem 1rem; font-size: 0.875rem; background: #d97706;">
+              🚀 Dispatch Now (Skip 1-Min)
+            </button>
+          </div>
+        </div>
+
+        <div class="countdown-bar-track">
+          <div class="countdown-bar-fill" id="dispatchCountdownBar" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Dispatched Confirmation & Partner NGOs Alert Board -->
+      <div class="dispatch-banner-card dispatch-banner-sent" id="dispatchCompletedCard" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem;">
+          <div>
+            <h4 style="font-size: 1.25rem; font-weight: 800; color: #065f46; display: flex; align-items: center; gap: 8px;">
+              <span>⚡</span> Surplus Request Successfully Dispatched to 4 Partner NGOs!
+            </h4>
+            <p style="font-size: 0.875rem; color: #047857; margin-top: 2px;">
+              Broadcasted priority rescue request for <strong id="sentSurplusMeals">0 meals</strong> at <span id="sentTimestamp">Closing time</span>. Listing posted to live feed.
+            </p>
+          </div>
+          <button type="button" class="btn-primary" onclick="simulateNgoClaim()" style="background: #059669;">
+            🤝 Simulate Partner NGO Claiming Food
+          </button>
+        </div>
+
+        <div class="ngo-grid" id="ngoDispatchGrid">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- AVAILABLE FOOD LISTINGS (Feature 3 & 4) -->
+    <section id="availableFoodSection" style="scroll-margin-top: 100px;">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <h2 class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" color="var(--primary-600)"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+            Available Surplus Food
+          </h2>
+          <p class="section-subtitle">Real-time surplus listings from campus canteens, restaurants, and hostels.</p>
+          <div class="smart-priority-banner" style="margin-top: 8px; font-size: 0.8125rem; color: #065f46; display: inline-flex; align-items: center; gap: 8px; background: #ecfdf5; padding: 6px 14px; border-radius: var(--radius-md); border: 1px solid #a7f3d0; font-weight: 500;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span><strong>Smart Rescue Priority</strong> — Food closest to expiry is prioritized for rescue.</span>
+          </div>
+        </div>
+        <div>
+          <span class="demo-chip" id="resultsCountBadge">Loading donations...</span>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="filter-toolbar">
+        <div class="filter-row-top">
+          <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by food name, dining hall, or location...">
+          </div>
+
+          <select id="priorityFilter" class="select-filter" aria-label="Priority Filter">
+            <option value="all">⚡ All Priorities</option>
+            <option value="HIGH">🔥 High Priority</option>
+            <option value="MEDIUM">⚡ Medium Priority</option>
+            <option value="LOW">🟢 Low Priority</option>
+          </select>
+
+          <select id="statusFilter" class="select-filter" aria-label="Status Filter">
+            <option value="all" selected>✨ All Statuses</option>
+            <option value="available">🟢 Available Only</option>
+            <option value="claimed">🟠 Claimed</option>
+            <option value="picked_up">✅ Picked Up / Rescued</option>
+          </select>
+
+          <select id="providerFilter" class="select-filter" aria-label="Provider Filter">
+            <option value="all">All Providers</option>
+            <option value="college_canteen">🏫 Campus Canteens</option>
+            <option value="restaurant">🍽️ Restaurants & Cafes</option>
+            <option value="hostel_mess">🏢 Hostel Messes</option>
+            <option value="event_catering">🎉 Event Caterers</option>
+          </select>
+
+          <select id="dietaryFilter" class="select-filter" aria-label="Dietary Filter">
+            <option value="all">All Diets</option>
+            <option value="vegetarian">🟢 Pure Vegetarian</option>
+            <option value="vegan">🌿 Vegan Only</option>
+            <option value="non_veg">🥩 Non-Veg</option>
+          </select>
+        </div>
+
+        <!-- Category Pills -->
+        <div class="category-pills">
+          <button type="button" class="pill-btn active" data-category="all">✨ All Surplus</button>
+          <button type="button" class="pill-btn" data-category="cooked_meals">🍲 Cooked Meals & Curries</button>
+          <button type="button" class="pill-btn" data-category="bakery">🥖 Bakery & Bread</button>
+          <button type="button" class="pill-btn" data-category="fresh_produce">🍎 Fresh Produce</button>
+          <button type="button" class="pill-btn" data-category="dairy_beverages">🥛 Dairy & Drinks</button>
+          <button type="button" class="pill-btn" data-category="packaged_groceries">📦 Groceries</button>
+        </div>
+      </div>
+
+      <!-- Food Donation Cards Grid -->
+      <div class="donations-grid" id="donationsGrid">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+    </section>
+
+    <!-- IMPACT DASHBOARD (Feature 5) -->
+    <section class="impact-section" id="impactSection" style="scroll-margin-top: 100px;">
+      <div class="impact-hero-banner">
+        <div class="impact-hero-left">
+          <h3>🌱 Community Waste Reduction & Impact</h3>
+          <p>Real-time environmental calculation based on the EPA WARM standard and FAO food waste conversion factors.</p>
+        </div>
+        <div class="milestone-badge">
+          <div class="milestone-title">Impact Tier</div>
+          <div class="milestone-rank">🏆 Campus Champion</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid" style="margin-top: 0; margin-bottom: 2rem;">
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="impactMealsRescued">0</div>
+            <div class="kpi-label">Meals Rescued</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-emerald">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="impactWastePrevented">0 kg</div>
+            <div class="kpi-label">Approx Food Waste Saved</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="impactSuccessfulPickups">0</div>
+            <div class="kpi-label">Successful Pickups</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-box kpi-amber">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+          </div>
+          <div>
+            <div class="kpi-value" id="impactTotalDonations">0</div>
+            <div class="kpi-label">Total Donations Posted</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact Equivalencies -->
+      <h4 style="font-size: 1.125rem; font-weight: 700; color: var(--neutral-800); margin-bottom: 1rem;">
+        🌍 Environmental Equivalencies
+      </h4>
+      <div class="equivalencies-grid">
+        <div class="equiv-card">
+          <div class="equiv-icon">🚗</div>
+          <div>
+            <div class="equiv-value" id="equivCarMiles">0 miles</div>
+            <div class="equiv-label">Vehicle emissions offset</div>
+          </div>
+        </div>
+        <div class="equiv-card">
+          <div class="equiv-icon">🚿</div>
+          <div>
+            <div class="equiv-value" id="equivShowers">0 showers</div>
+            <div class="equiv-label">Fresh water footprint conserved</div>
+          </div>
+        </div>
+        <div class="equiv-card">
+          <div class="equiv-icon">👨‍👩‍👧‍👦</div>
+          <div>
+            <div class="equiv-value" id="equivFamilies">0 families</div>
+            <div class="equiv-label">Equivalent daily family meals provided</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Breakdown Row -->
+      <div class="breakdown-row">
+        <div class="breakdown-card">
+          <h4>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+            Food Rescued by Category
+          </h4>
+          <div class="bar-progress-group" id="categoryBreakdownContainer">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+
+        <div class="breakdown-card">
+          <h4>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Contribution by Provider Source
+          </h4>
+          <div class="bar-progress-group" id="providerBreakdownContainer">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section id="howItWorksSection" style="margin-top: 4rem; scroll-margin-top: 100px;">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto 2.5rem;">
+        <h2 style="font-size: 1.75rem; font-weight: 800; color: var(--neutral-900);">How FoodSave Works</h2>
+        <p style="color: var(--neutral-500); margin-top: 0.5rem;">A simple, zero-friction 3-step loop connecting food surpluses with community hunger.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <div style="background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm);">
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--primary-50); color: var(--primary-600); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem; margin-bottom: 1rem;">1</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--neutral-900); margin-bottom: 0.5rem;">Post Surplus Food</h3>
+          <p style="font-size: 0.875rem; color: var(--neutral-600); line-height: 1.5;">Dining halls, kitchens, or hosts publish food details, pickup instructions, and expiry deadline in under 60 seconds.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm);">
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--accent-amber-light); color: var(--accent-amber); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem; margin-bottom: 1rem;">2</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--neutral-900); margin-bottom: 0.5rem;">Instant Claim & Verification</h3>
+          <p style="font-size: 0.875rem; color: var(--neutral-600); line-height: 1.5;">Shelters, pantries, or students reserve the food with 1 click and receive a verified Digital Pickup Pass with code.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: 1.75rem; box-shadow: var(--shadow-sm);">
+          <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: #ecfdf5; color: #047857; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem; margin-bottom: 1rem;">3</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--neutral-900); margin-bottom: 0.5rem;">Pickup & Track Impact</h3>
+          <p style="font-size: 0.875rem; color: var(--neutral-600); line-height: 1.5;">Collect the food cleanly. The system logs meals rescued, carbon offset, and waste diverted from landfills.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL 1: POST SURPLUS FOOD (Feature 2) -->
+  <div class="modal-overlay" id="postFoodModal" role="dialog" aria-modal="true" aria-labelledby="postFoodModalTitle">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="postFoodModalTitle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" color="var(--primary-600)"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Donate Surplus Food
+        </h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('postFoodModal')" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Hackathon 1-Click Demo Pre-fills -->
+        <div class="demo-preset-banner">
+          <div class="demo-preset-text">
+            <span>⚡ Hackathon Quick-Fill:</span>
+          </div>
+          <div class="demo-preset-buttons" id="formPresetsContainer">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+
+        <form id="postFoodForm">
+          <div class="form-group">
+            <label class="form-label" for="postTitle">Food Item Title *</label>
+            <input type="text" id="postTitle" class="form-input" placeholder="e.g. Steamed Basmati Rice, Paneer Curry & Dal" required>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="postMeals">Number of Meals *</label>
+              <input type="number" id="postMeals" class="form-input" min="1" max="1000" placeholder="e.g. 25" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="postWeight">Approx Weight (kg) <span class="form-label-hint">Auto-computed</span></label>
+              <input type="number" step="0.1" id="postWeight" class="form-input" placeholder="e.g. 10.0">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="postFoodType">Food Category *</label>
+              <select id="postFoodType" class="form-select" required>
+                <option value="cooked_meals">🍲 Cooked Meals / Curries / Rice</option>
+                <option value="bakery">🥖 Bakery & Artisan Bread</option>
+                <option value="fresh_produce">🍎 Fresh Fruits & Vegetables</option>
+                <option value="dairy_beverages">🥛 Dairy & Plant Drinks</option>
+                <option value="packaged_groceries">📦 Packaged Groceries</option>
+                <option value="other">🥗 Other Edible Surplus</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="postDietary">Dietary Type *</label>
+              <select id="postDietary" class="form-select" required>
+                <option value="vegetarian">🟢 Pure Vegetarian</option>
+                <option value="vegan">🌿 Vegan (Plant-based)</option>
+                <option value="non_veg">🥩 Non-Vegetarian</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="postProviderName">Provider / Entity Name *</label>
+              <input type="text" id="postProviderName" class="form-input" placeholder="e.g. Central Campus Dining Hall" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="postProviderType">Provider Type *</label>
+              <select id="postProviderType" class="form-select" required>
+                <option value="college_canteen">🏫 College / Campus Canteen</option>
+                <option value="restaurant">🍽️ Restaurant / Bistro / Cafe</option>
+                <option value="hostel_mess">🏢 Hostel Mess Kitchen</option>
+                <option value="event_catering">🎉 Event & Summit Catering</option>
+                <option value="household">🏡 Household Surplus</option>
+                <option value="supermarket">🛒 Grocer / Supermarket</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="postPickupAddress">Pickup Location & Address *</label>
+            <input type="text" id="postPickupAddress" class="form-input" placeholder="e.g. North Block, 2nd Floor Dining Court, Service Door B" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="postInstructions">Pickup Instructions / Landmarks</label>
+            <input type="text" id="postInstructions" class="form-input" placeholder="e.g. Ring kitchen doorbell; please bring containers or carry boxes">
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="postAvailableUntil">Available Until (Expiry) *</label>
+              <input type="datetime-local" id="postAvailableUntil" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="postStorage">Storage & Handling Condition</label>
+              <input type="text" id="postStorage" class="form-input" placeholder="e.g. Insulated thermal unit (65°C) / Refrigerated">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="postContactName">Contact Person Name</label>
+              <input type="text" id="postContactName" class="form-input" placeholder="e.g. Chef Rajesh Kumar">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="postContactPhone">Contact Phone Number *</label>
+              <input type="tel" id="postContactPhone" class="form-input" placeholder="e.g. +1 (555) 234-5678" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="postDescription">Food Notes / Description</label>
+            <textarea id="postDescription" class="form-textarea" placeholder="Describe the food preparation, ingredients, allergens, or quantity containers..."></textarea>
+          </div>
+
+          <!-- Food Photography Preset Picker -->
+          <div class="form-group">
+            <label class="form-label">Food Photo Preset <span class="form-label-hint">(Click to choose photo)</span></label>
+            <div class="image-preset-picker">
+              <div class="image-preset-thumb selected" data-img="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80">
+                <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=200&q=60" alt="Rice and Curry">
+              </div>
+              <div class="image-preset-thumb" data-img="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80">
+                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=60" alt="Fresh Bakery">
+              </div>
+              <div class="image-preset-thumb" data-img="https://images.unsplash.com/photo-1621996346565-e3d5d6281691?auto=format&fit=crop&w=800&q=80">
+                <img src="https://images.unsplash.com/photo-1621996346565-e3d5d6281691?auto=format&fit=crop&w=200&q=60" alt="Pasta Dish">
+              </div>
+              <div class="image-preset-thumb" data-img="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80">
+                <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=200&q=60" alt="Fruit Crates">
+              </div>
+            </div>
+            <input type="url" id="postCustomImage" class="form-input" style="margin-top: 0.5rem;" placeholder="Or paste a custom image URL...">
+          </div>
+
+          <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button type="button" class="btn-secondary" onclick="closeModal('postFoodModal')">Cancel</button>
+            <button type="submit" class="btn-primary" id="postSubmitBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+              Post Surplus Food
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CLAIM FOOD VERIFICATION (Feature 4) -->
+  <div class="modal-overlay" id="claimFoodModal" role="dialog" aria-modal="true" aria-labelledby="claimModalTitle">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="claimModalTitle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" color="var(--primary-600)"><path d="M20 6L9 17l-5-5"></path></svg>
+          Claim Surplus Food
+        </h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('claimFoodModal')" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Food summary box -->
+        <div style="background: var(--neutral-50); border: 1px solid var(--neutral-200); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;">
+          <h4 id="claimFoodTitle" style="font-size: 1.0625rem; font-weight: 700; color: var(--neutral-900);">Food Title</h4>
+          <div style="font-size: 0.8125rem; color: var(--neutral-600); margin-top: 4px; display: flex; flex-direction: column; gap: 3px;">
+            <div>🏢 Provider: <strong id="claimProviderName">Provider</strong></div>
+            <div>📍 Pickup: <span id="claimAddress">Address</span></div>
+            <div>🍱 Quantity: <strong id="claimQuantity">0 meals</strong></div>
+            <div>⏳ Expiry: <strong id="claimExpiry" style="color: var(--accent-red);">Time</strong></div>
+          </div>
+        </div>
+
+        <form id="claimFoodForm">
+          <div class="form-group">
+            <label class="form-label" for="claimReceiverName">Your Full Name *</label>
+            <input type="text" id="claimReceiverName" class="form-input" placeholder="e.g. Marcus Chen" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="claimReceiverOrg">Organization / Individual Type</label>
+            <input type="text" id="claimReceiverOrg" class="form-input" placeholder="e.g. Campus Food Pantry / Student Rescuer / Hope Shelter">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="claimReceiverPhone">Your Contact Phone *</label>
+            <input type="tel" id="claimReceiverPhone" class="form-input" placeholder="e.g. +1 (555) 987-6543" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="claimEstimatedTime">Estimated Pickup Time *</label>
+            <select id="claimEstimatedTime" class="form-select" required>
+              <option value="Within 30 minutes">🏃 Within 30 minutes (Immediate)</option>
+              <option value="Within 1 hour" selected>⏱️ Within 1 hour</option>
+              <option value="Within 2 hours">⏳ Within 2 hours</option>
+              <option value="This afternoon / evening">🌙 Later today before expiry</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="claimNotes">Pickup Notes / Vehicle Info</label>
+            <input type="text" id="claimNotes" class="form-input" placeholder="e.g. Bringing 2 insulated transport coolers; walking over from dorms">
+          </div>
+
+          <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button type="button" class="btn-secondary" onclick="closeModal('claimFoodModal')">Cancel</button>
+            <button type="submit" class="btn-primary" id="confirmClaimBtn">
+              Confirm & Claim Surplus Food
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: DIGITAL PICKUP PASS & COMPLETE (Feature 4) -->
+  <div class="modal-overlay" id="pickupPassModal" role="dialog" aria-modal="true" aria-labelledby="pickupPassTitle">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="pickupPassTitle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" color="var(--primary-600)"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="7" y1="16" x2="11" y2="16"></line></svg>
+          Digital Pickup Pass
+        </h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('pickupPassModal')" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="pickup-pass-card">
+          <div class="pass-header">
+            <div class="pass-code-label">Verification Claim Code</div>
+            <div class="pass-code-value" id="passClaimCode">FS-0000</div>
+            <p style="font-size: 0.8125rem; color: var(--neutral-500);">Show this verification code to the provider upon pickup.</p>
+          </div>
+
+          <div class="pass-details-table">
+            <div class="pass-row">
+              <span class="pass-row-label">Food Item:</span>
+              <span class="pass-row-val" id="passFoodTitle">Food Name</span>
+            </div>
+            <div class="pass-row">
+              <span class="pass-row-label">Quantity:</span>
+              <span class="pass-row-val" id="passMeals">0 Meals</span>
+            </div>
+            <div class="pass-row">
+              <span class="pass-row-label">Provider:</span>
+              <span class="pass-row-val" id="passProvider">Provider</span>
+            </div>
+            <div class="pass-row">
+              <span class="pass-row-label">Contact Phone:</span>
+              <span class="pass-row-val" id="passPhone">+1 (555) 000-0000</span>
+            </div>
+            <div class="pass-row">
+              <span class="pass-row-label">Pickup Location:</span>
+              <span class="pass-row-val" id="passAddress">Address</span>
+            </div>
+            <div class="pass-row">
+              <span class="pass-row-label">Pickup Instructions:</span>
+              <span class="pass-row-val" id="passInstructions">Instructions</span>
+            </div>
+            <div class="pass-row">
+              <span class="pass-row-label">Claimed By:</span>
+              <span class="pass-row-val" id="passReceiver">Receiver</span>
+            </div>
+            <div class="pass-row">
+              <span class="pass-row-label">Must Collect By:</span>
+              <span class="pass-row-val" id="passDeadline" style="color: var(--accent-red);">Time</span>
+            </div>
+          </div>
+
+          <div class="pass-actions">
+            <a href="tel:" id="passCallProviderBtn" class="btn-secondary" style="justify-content: center; width: 100%;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              Call Provider
+            </a>
+
+            <button type="button" class="btn-secondary" onclick="copyPickupDetails()" style="justify-content: center; width: 100%;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy Pickup Instructions
+            </button>
+
+            <!-- Complete Rescue button -->
+            <button type="button" class="btn-primary" id="passMarkCompleteBtn" style="justify-content: center; width: 100%;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Confirm Food Picked Up (Complete Rescue)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: SUPABASE & DEMO SETTINGS (Feature 7) -->
+  <div class="modal-overlay" id="supabaseModal" role="dialog" aria-modal="true" aria-labelledby="supabaseModalTitle">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="supabaseModalTitle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" color="var(--primary-600)"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+          Supabase Database Setup
+        </h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('supabaseModal')" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size: 0.875rem; color: var(--neutral-600); margin-bottom: 1rem;">
+          Connect your live Supabase project to persist food donations, user profiles, and claims across the cloud.
+        </p>
+
+        <form id="supabaseConfigForm">
+          <div class="form-group">
+            <label class="form-label" for="supabaseUrlInput">Supabase Project URL</label>
+            <input type="url" id="supabaseUrlInput" class="form-input" placeholder="https://your-project-id.supabase.co">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="supabaseKeyInput">Supabase Anon Key</label>
+            <input type="password" id="supabaseKeyInput" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+          </div>
+
+          <div style="background: var(--neutral-50); border: 1px solid var(--neutral-200); border-radius: var(--radius-md); padding: 0.875rem; margin-bottom: 1.25rem;">
+            <div style="font-size: 0.8125rem; font-weight: 700; color: var(--neutral-800); margin-bottom: 4px;">
+              📁 SQL Schema File Available:
+            </div>
+            <p style="font-size: 0.78125rem; color: var(--neutral-600);">
+              The complete SQL migration script with <code>users</code>, <code>food_donations</code>, <code>claims</code> tables and RLS policies is ready in <code>supabase/schema.sql</code>.
+            </p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+            <button type="button" class="btn-secondary" onclick="disconnectSupabase()" style="color: var(--accent-red); border-color: #fca5a5;">
+              Use Local Storage / SQLite
+            </button>
+            <div style="display: flex; gap: 0.5rem;">
+              <button type="button" class="btn-secondary" onclick="closeModal('supabaseModal')">Close</button>
+              <button type="submit" class="btn-primary" id="supabaseTestBtn">
+                Save & Connect
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Drawer -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="brand-icon-box" style="width: 32px; height: 32px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"></path></svg>
+          </div>
+          <span style="font-weight: 800; font-size: 1.125rem; color: var(--primary-900);">FoodSave</span>
+        </div>
+        <p class="footer-copy">Built for student hackathon demonstration. Eliminating campus & community food waste one meal at a time.</p>
+      </div>
+      <div style="font-size: 0.8125rem; color: var(--neutral-500);">
+        <span>Sustainable Development Goals: <strong>SDG 2 (Zero Hunger)</strong> &amp; <strong>SDG 12 (Responsible Consumption)</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Scripts -->
+  <script src="js/mockData.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
